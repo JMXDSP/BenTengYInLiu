@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.or
+g/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.douyin.mapper.DspAwemeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="dspAwemeResultMap" type="org.springblade.douyin.entity.DspAweme">
+        <id column="id" property="id"/>
+        <result column="aweme_id" property="awemeId"/>
+        <result column="aweme_desc" property="awemeDesc"/>
+        <result column="aweme_type" property="awemeType"/>
+        <result column="aweme_duration" property="awemeDuration"/>
+        <result column="aweme_author_user_id" property="awemeAuthorUserId"/>
+        <result column="aweme_author_uid" property="awemeAuthorUid"/>
+        <result column="aweme_author_unique_id" property="awemeAuthorUniqueId"/>
+        <result column="aweme_author_nickname" property="awemeAuthorNickname"/>
+        <result column="aweme_author_signature" property="awemeAuthorSignature"/>
+        <result column="aweme_author_short_id" property="awemeAuthorShortId"/>
+        <result column="aweme_author_avatar_thumb" property="awemeAuthorAvatarThumb"/>
+        <result column="aweme_author_avatar_medium" property="awemeAuthorAvatarMedium"/>
+        <result column="aweme_author_avatar_larger" property="awemeAuthorLarger"/>
+        <result column="aweme_music_title" property="awemeMusicTitle"/>
+        <result column="aweme_music_author" property="awemeMusicAuthor"/>
+        <result column="aweme_music_url" property="awemeMusicUrl"/>
+        <result column="aweme_music_id" property="awemeMusicId"/>
+        <result column="aweme_music_mid" property="awemeMusicMid"/>
+        <result column="aweme_music_duration" property="awemeMusicDuration"/>
+        <result column="aweme_music_cover_thumb" property="awemeMusicCoverThumb"/>
+        <result column="aweme_music_cover_large" property="awemeMusicCoverLarge"/>
+        <result column="aweme_music_cover_medium" property="awemeMusicCoverMedium"/>
+        <result column="aweme_music_cover_hd" property="awemeMusicCoverHd"/>
+        <result column="aweme_music_status" property="awemeMusicStatus"/>
+        <result column="aweme_video_duration" property="awemeVideoDuration"/>
+        <result column="aweme_video_play_addr_url" property="awemeVideoPayAddrUrl"/>
+        <result column="aweme_video_cover" property="awemeVideoCover"/>
+        <result column="aweme_video_dynamic_cover" property="awemeVideoDynamicCover"/>
+        <result column="aweme_video_origin_cover" property="awemeVideoOriginCover"/>
+        <result column="aweme_video_vid" property="awemeVideoVid"/>
+        <result column="aweme_share_url" property="awemeVideUrl"/>
+        <result column="aweme_statistics_comment_count" property="awemeStatisticsCommentCount"/>
+        <result column="aweme_statistics_digg_count" property="awemeStatisticsDiggCount"/>
+        <result column="aweme_create_time" property="awemeCreateTime"/>
+        <result column="con" property="con"/>
+    </resultMap>
+
+<!--    <select id="dspAwemeList" resultMap="dspAwemeResultMap">-->
+<!--        select a.aweme_id,a.aweme_desc from dsp_aweme a,dsp_user u where u.aweme_id = a.aweme_id and a.aweme_desc != '' limit 10-->
+<!--    </select>-->
+
+    <select id="homeDspAwemeList" resultMap="dspAwemeResultMap">
+        select a.aweme_desc,a.aweme_author_avatar_medium,a.aweme_statistics_comment_count,a.aweme_statistics_digg_count from dsp_aweme a where a.aweme_statistics_digg_count != 0 order by a.aweme_statistics_digg_count desc limit 5
+    </select>
+
+    <select id="homeDspAwemeMusic" resultMap="dspAwemeResultMap">
+        select * from (select a.aweme_music_title,count(a.id) con from dsp_aweme a group by aweme_music_title) t1 order by t1.con desc limit 5
+    </select>
+
+    <select id="dspAwemeList" resultMap="dspAwemeResultMap">
+        select aweme_desc,FROM_UNIXTIME(aweme_create_time, '%Y-%m-%d %H:%i:%s') aweme_create_time,aweme_author_nickname,aweme_statistics_digg_count,aweme_statistics_comment_count from dsp_aweme where id in (select id from dsp_aweme where aweme_desc like concat('%', #{name}, '%'))  limit 100
+    </select>
+
+    <select id="aspAwemeMusic" resultMap="dspAwemeResultMap">
+        select count(1) con,aweme_music_title from dsp_aweme where aweme_music_title in (select aweme_music_title from dsp_aweme where aweme_music_title like concat('%', #{name}, '%') group by aweme_music_title) group by aweme_music_title
+    </select>
+</mapper>

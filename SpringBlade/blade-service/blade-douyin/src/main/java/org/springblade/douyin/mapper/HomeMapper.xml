@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.or
+g/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.douyin.mapper.HomeMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="HomeResultMap" type="org.springblade.douyin.entity.Home">
+        <result column="aweme_id" property="awemeId"/>
+        <result column="aweme_desc" property="awemeDesc"/>
+    </resultMap>
+
+    <select id="homeList" resultMap="HomeResultMap">
+        <!--        select * from dsp_extra where id = #{id}-->
+        select a.aweme_id,a.aweme_desc from dsp_aweme a,dsp_user u where u.aweme_id = a.aweme_id and a.aweme_desc != '' limit 10
+    </select>
+</mapper>

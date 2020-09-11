@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.or
+g/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.douyin.mapper.DspUserMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="dspUserResultMap" type="org.springblade.douyin.entity.DspUser">
+        <id column="id" property="id"/>
+        <result column="aweme_id" property="awemeId"/>
+        <result column="aweme_desc" property="awemeDesc"/>
+        <result column="aweme_play_video_url" property="awemePlayVideoUrl"/>
+        <result column="aweme_download_video_url" property="awemeDownloadVideoUrl"/>
+        <result column="aweme_video_cover_url" property="awemeVideoCoverUrl"/>
+        <result column="aweme_author_uid" property="awemeAuthorUid"/>
+        <result column="aweme_author_nickname" property="awemeAuthorNickname"/>
+        <result column="aweme_author_signature" property="awemeAuthorSignature"/>
+        <result column="aweme_author_favoriting_count" property="awemeAuthorFavortingCount"/>
+        <result column="aweme_author_total_favorited" property="awemeAuthorTotalFavorited"/>
+        <result column="aweme_author_short_id" property="awemeAuthorShortId"/>
+        <result column="aweme_author_avatar_thumb" property="awemeAuthorAvatarThumb"/>
+        <result column="aweme_author_avatar_medium" property="awemeAuthorAvatarMedium"/>
+        <result column="aweme_author_avatar_larger" property="awemeAuthorAvatarLarger"/>
+        <result column="aweme_author_following_count" property="awemeAuthorFollowingCount"/>
+        <result column="aweme_author_aweme_count" property="awemeAuthorAwemeCount"/>
+        <result column="aweme_author_unique_id" property="awemeAuthorUniqueId"/>
+        <result column="aweme_author_region" property="awemeAuthorRegion"/>
+        <result column="aweme_statistics_comment_count" property="awemeStatisticsCommentCount"/>
+        <result column="aweme_statistics_digg_count" property="awemeStatisticsDiggCount"/>
+        <result column="aweme_statistics_share_count" property="awemeStatisticsShareCount"/>
+        <result column="aweme_statistics_forward_count" property="awemeStatisticsForwardCount"/>
+        <result column="aweme_statistics_play_count" property="awemeStatisticsPlayCount"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <select id="dspUserList" resultMap="dspUserResultMap">
+        select aweme_author_nickname,round(avg(aweme_author_following_count),0) aweme_author_following_count,round(avg(aweme_statistics_digg_count),0) aweme_statistics_digg_count,round(avg(aweme_statistics_share_count),0) aweme_statistics_share_count,round(avg(aweme_statistics_forward_count),0) aweme_statistics_forward_count from dsp_user where id in (select id from dsp_user where aweme_author_nickname like CONCAT('%',#{name},'%')) group by aweme_author_nickname
+<!--        select id from dsp_user where aweme_author_nickname like '%'+#{id}+'%'-->
+    </select>
+</mapper>
